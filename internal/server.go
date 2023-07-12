@@ -6,7 +6,10 @@ import (
 	"os"
 	"os/signal"
 	"time"
+	"v1/internal/middleware"
 	"v1/pkg"
+	"v1/pkg/app"
+	"v1/pkg/err"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -29,8 +32,11 @@ func (s *Server) Run() {
 func boot() {
 	gin.SetMode(pkg.Sc.Mode)
 	engine := gin.New()
-	engine.Use(gin.Logger())
+	engine.Use(middleware.Logger())
 	engine.Use(gin.Recovery())
+	engine.GET("/", func(ctx *gin.Context) {
+		app.NewResponse(ctx).ErrTo(err.InvalidParams)
+	})
 	srv := &http.Server{
 		Addr:    pkg.Sc.Port,
 		Handler: engine,

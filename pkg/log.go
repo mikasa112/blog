@@ -12,11 +12,22 @@ var Log *zap.Logger
 
 func init() {
 	var coreList []zapcore.Core
-	ec := zap.NewProductionEncoderConfig()
-	ec.EncodeTime = zapcore.ISO8601TimeEncoder
-	//按级别显示颜色
-	ec.EncodeLevel = zapcore.CapitalLevelEncoder
-	encoder := zapcore.NewConsoleEncoder(ec)
+	//日志格式
+	ec := zapcore.EncoderConfig{
+		TimeKey:        "time",
+		LevelKey:       "level",
+		NameKey:        "name",
+		CallerKey:      "line",
+		MessageKey:     "msg",
+		FunctionKey:    "func",
+		StacktraceKey:  "stacktrace",
+		LineEnding:     zapcore.DefaultLineEnding,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeTime:     zapcore.TimeEncoderOfLayout("2006/01/02 - 15:04:05"),
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeCaller:   zapcore.FullCallerEncoder,
+		EncodeName:     zapcore.FullNameEncoder,
+	}
 	hight := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
 		return lev >= zap.ErrorLevel
 	})
@@ -30,7 +41,7 @@ func init() {
 		MaxAge:     30,   //日志保留天数
 		Compress:   true, //是否压缩
 	})
-	infoCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(infoFileWriteSyncer, zapcore.AddSync(os.Stdout)), low)
+	infoCore := zapcore.NewCore(zapcore.NewConsoleEncoder(ec), zapcore.NewMultiWriteSyncer(infoFileWriteSyncer, zapcore.AddSync(os.Stdout)), low)
 	errorFileWriteSyncer := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   "./log/error.log",
 		MaxSize:    5,    //文件大小，单位MB
@@ -38,7 +49,7 @@ func init() {
 		MaxAge:     60,   //日志保留天数
 		Compress:   true, //是否压缩
 	})
-	errorCore := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(errorFileWriteSyncer, zapcore.AddSync(os.Stdout)), hight)
+	errorCore := zapcore.NewCore(zapcore.NewConsoleEncoder(ec), zapcore.NewMultiWriteSyncer(errorFileWriteSyncer, zapcore.AddSync(os.Stdout)), hight)
 	coreList = append(coreList, infoCore)
 	coreList = append(coreList, errorCore)
 	//addcaller() 显示行号和文件名

@@ -1,4 +1,6 @@
 ---
 server:
+  max_page_size: 30
   mode: debug
-  port: :8081
+  page_size: 10
+  port: ':8081'

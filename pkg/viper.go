@@ -7,8 +7,10 @@ import (
 )
 
 type ServerSetting struct {
-	Mode string
-	Port string
+	Mode        string
+	Port        string
+	PageSize    int
+	MaxPageSize int
 }
 
 var Sc ServerSetting
