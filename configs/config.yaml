@@ -1,6 +1,10 @@
 ---
-server:
-  max_page_size: 30
-  mode: debug
-  page_size: 10
-  port: ':8081'
+Database:
+  DBName: d_blog
+  Password: root
+  Username: root
+Server:
+  MaxPageSize: 30
+  Mode: debug
+  PageSize: 10
+  Port: ':8081'

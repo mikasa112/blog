@@ -13,7 +13,15 @@ type ServerSetting struct {
 	MaxPageSize int
 }
 
+type DatabasesSetting struct {
+	DBName   string
+	Username string
+	Password string
+}
+
 var Sc ServerSetting
+
+var Ds DatabasesSetting
 
 func ReadConfig() {
 	viper.SetConfigName("config")
@@ -24,7 +32,11 @@ func ReadConfig() {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 	//解析key到struct
-	err = viper.UnmarshalKey("server", &Sc)
+	err = viper.UnmarshalKey("Server", &Sc)
+	if err != nil {
+		Log.Sugar().Fatalf("unable to decode into struct, %v", err)
+	}
+	err = viper.UnmarshalKey("Database", &Ds)
 	if err != nil {
 		Log.Sugar().Fatalf("unable to decode into struct, %v", err)
 	}
