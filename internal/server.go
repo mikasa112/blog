@@ -8,8 +8,8 @@ import (
 	"time"
 	"v1/internal/middleware"
 	"v1/internal/model"
+	v1 "v1/internal/routers/api/v1"
 	"v1/pkg"
-	"v1/pkg/app"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -34,10 +34,16 @@ func boot() {
 	gin.SetMode(pkg.Sc.Mode)
 	engine := gin.New()
 	engine.Use(middleware.Logger())
+	engine.Use(middleware.Translations())
 	engine.Use(gin.Recovery())
-	engine.GET("/", func(ctx *gin.Context) {
-		app.NewResponse(ctx).To("success")
-	})
+
+	user := v1.NewUser()
+	// apiv1 := engine.Group("api/v1")
+	{
+
+	}
+	engine.POST("/api/login", user.Login)
+
 	srv := &http.Server{
 		Addr:    pkg.Sc.Port,
 		Handler: engine,

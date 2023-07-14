@@ -34,6 +34,10 @@ func init() {
 	low := zap.LevelEnablerFunc(func(l zapcore.Level) bool {
 		return l < zap.ErrorLevel && l > zap.DebugLevel
 	})
+	//debug
+	debug := zap.LevelEnablerFunc(func(l zapcore.Level) bool {
+		return l == zap.DebugLevel
+	})
 	infoFileWriteSyncer := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   "./log/info.log",
 		MaxSize:    10,   //文件大小，单位MB
@@ -50,8 +54,11 @@ func init() {
 		Compress:   true, //是否压缩
 	})
 	errorCore := zapcore.NewCore(zapcore.NewConsoleEncoder(ec), zapcore.NewMultiWriteSyncer(errorFileWriteSyncer, zapcore.AddSync(os.Stdout)), hight)
+	//debug 模式只在控制台打印
+	debugCore := zapcore.NewCore(zapcore.NewConsoleEncoder(ec), zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout)), debug)
 	coreList = append(coreList, infoCore)
 	coreList = append(coreList, errorCore)
+	coreList = append(coreList, debugCore)
 	//addcaller() 显示行号和文件名
 	Log = zap.New(zapcore.NewTee(coreList...), zap.AddCaller())
 }
