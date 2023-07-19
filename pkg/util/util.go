@@ -9,13 +9,10 @@ import (
 	"v1/pkg"
 )
 
-func MD5Encode(data string) (string, error) {
+func MD5Encode(data string) string {
 	h := md5.New()
-	_, err := io.WriteString(h, data)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%x", h.Sum(nil)), nil
+	_, _ = io.WriteString(h, data)
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
 // GenerateToken 生成token

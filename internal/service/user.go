@@ -19,10 +19,7 @@ func (s *Service) Login(param *LoginRequest) (string, error) {
 	if err != nil {
 		return "", e.UsernameOrPasswordError
 	}
-	pwd, err := util.MD5Encode(param.Password)
-	if err != nil {
-		return "", e.UsernameOrPasswordError
-	}
+	pwd := util.MD5Encode(param.Password)
 	if pwd == u.Password {
 
 		return "", nil
