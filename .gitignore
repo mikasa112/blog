@@ -22,3 +22,6 @@ go.work
 
 # log
 log/
+
+# idea
+.idea/

@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -19,9 +20,17 @@ type DatabasesSetting struct {
 	Password string
 }
 
+type JwtSetting struct {
+	Secret string
+	Issuer string
+	Expire time.Duration
+}
+
 var Sc ServerSetting
 
 var Ds DatabasesSetting
+
+var Js JwtSetting
 
 func ReadConfig() {
 	viper.SetConfigName("config")
@@ -40,4 +49,9 @@ func ReadConfig() {
 	if err != nil {
 		Log.Sugar().Fatalf("unable to decode into struct, %v", err)
 	}
+	err = viper.UnmarshalKey("JWT", &Js)
+	if err != nil {
+		Log.Sugar().Fatalf("unable to decode into struct, %v", err)
+	}
+	Js.Expire *= time.Second
 }

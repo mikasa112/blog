@@ -8,3 +8,7 @@ Server:
   Mode: debug
   PageSize: 10
   Port: ':8081'
+JWT:
+  Secret: asd39Xasd1OS
+  Issuer: blog-service
+  Expire: 7200

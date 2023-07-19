@@ -10,4 +10,6 @@ var (
 	UnauthorizedTokenTimeout  = NewErr(10005, "鉴权失败, Token 超时")
 	UnauthorizedTokenGenerate = NewErr(10006, "鉴权失败, Token 生成失败")
 	TooManyRequests           = NewErr(10007, "请求过多")
+
+	UsernameOrPasswordError = NewErr(10008, "用户名或密码错误")
 )
