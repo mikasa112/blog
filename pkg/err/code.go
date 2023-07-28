@@ -12,4 +12,5 @@ var (
 	TooManyRequests           = NewErr(10007, "请求过多")
 
 	UsernameOrPasswordError = NewErr(10008, "用户名或密码错误")
+	UserIsExist             = NewErr(10009, "用户已存在")
 )

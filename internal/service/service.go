@@ -11,8 +11,8 @@ type Service struct {
 	dao *dao.Dao
 }
 
-func New(ctx context.Context) Service {
-	s := Service{ctx: ctx}
+func New(ctx context.Context) *Service {
+	s := &Service{ctx: ctx}
 	s.dao = dao.New(model.DB)
 	return s
 }

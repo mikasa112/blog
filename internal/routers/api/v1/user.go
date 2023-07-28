@@ -23,5 +23,30 @@ func (u User) Login(c *gin.Context) {
 		response.ErrTo(err.InvalidParams.WithDetails(errs.Errors()...))
 		return
 	}
+	s := service.New(c)
+	token, e := s.Login(param)
+	if e != nil {
+		response.ErrTo(e)
+		return
+	}
+	response.To(gin.H{
+		"token": token,
+	})
+}
+
+func (u User) GenerateUser(c *gin.Context) {
+	param := service.RegisterRequest{}
+	response := app.NewResponse(c)
+	valid, errs := app.BindAndValid(c, &param)
+	if !valid {
+		response.ErrTo(err.InvalidParams.WithDetails(errs.Errors()...))
+		return
+	}
+	s := service.New(c)
+	e := s.GenerateUser(param.Username, param.Password)
+	if e != nil {
+		response.ErrTo(e)
+		return
+	}
 	response.To(gin.H{})
 }

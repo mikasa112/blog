@@ -20,6 +20,11 @@ func (d *Dao) QueryUserByName(username string) (*model.User, error) {
 	return u.QueryItemByName(d.engine)
 }
 
+func (d *Dao) QueryUsersCount() (int64, error) {
+	u := model.User{}
+	return u.GetUsersCount(d.engine)
+}
+
 func (d *Dao) UpdateUserById(id uint, username, password, email, avatar, bio string) error {
 	u := model.User{
 		Username:  username,

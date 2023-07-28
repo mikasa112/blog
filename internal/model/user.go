@@ -13,11 +13,20 @@ type User struct {
 
 func (u User) QueryItemByName(db *gorm.DB) (*User, error) {
 	var user *User
-	d := db.Where("name = ?", u.Username).First(user)
+	d := db.Where("username = ?", u.Username).Take(&user)
 	if d.Error != nil {
 		return nil, d.Error
 	}
 	return user, nil
+}
+
+func (u User) GetUsersCount(db *gorm.DB) (int64, error) {
+	var count int64
+	d := db.Count(&count)
+	if d.Error != nil {
+		return 1, d.Error
+	}
+	return count, nil
 }
 
 func (u User) Create(db *gorm.DB) error {

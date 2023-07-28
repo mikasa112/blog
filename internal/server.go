@@ -43,6 +43,7 @@ func boot() {
 
 	}
 	engine.POST("/api/login", user.Login)
+	engine.POST("/api/generate", user.GenerateUser)
 
 	srv := &http.Server{
 		Addr:    pkg.Sc.Port,
